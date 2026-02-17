@@ -26,18 +26,19 @@
             font-family: 'Amiri', serif;
             background: radial-gradient(circle at bottom, var(--night-blue), var(--deep-blue));
             color: var(--text-light);
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
+            padding: 20px;
         }
 
         /* Background Stars Animation */
         .stars {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
@@ -59,145 +60,201 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
 
+        /* Floating Lanterns */
+        .lanterns {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .floating-lantern {
+            position: absolute;
+            font-size: 2rem;
+            animation: floatLantern 15s infinite ease-in-out;
+            opacity: 0.6;
+        }
+
+        @keyframes floatLantern {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
         /* Main Container */
         .container {
             text-align: center;
             z-index: 10;
-            background: rgba(15, 23, 42, 0.6);
+            background: rgba(15, 23, 42, 0.7);
             padding: 3rem;
             border-radius: 20px;
             border: 2px solid var(--primary-gold);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
-            backdrop-filter: blur(5px);
-            max-width: 90%;
-            width: 600px;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.4);
+            backdrop-filter: blur(10px);
+            max-width: 800px;
+            width: 90%;
+            animation: fadeInUp 1.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Crescent Moon CSS */
         .moon {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             background: transparent;
             border-radius: 50%;
-            box-shadow: -15px 15px 0 0 var(--primary-gold);
-            margin: 0 auto 20px auto;
+            box-shadow: -20px 20px 0 0 var(--primary-gold);
+            margin: 0 auto 30px auto;
             transform: rotate(-15deg);
-            filter: drop-shadow(0 0 10px var(--primary-gold));
-            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px var(--primary-gold));
+            animation: moonGlow 3s ease-in-out infinite;
         }
 
-        @keyframes float {
-            0%, 100% { transform: rotate(-15deg) translateY(0); }
-            50% { transform: rotate(-15deg) translateY(-10px); }
+        @keyframes moonGlow {
+            0%, 100% { filter: drop-shadow(0 0 20px var(--primary-gold)); transform: rotate(-15deg) scale(1); }
+            50% { filter: drop-shadow(0 0 40px var(--secondary-gold)); transform: rotate(-15deg) scale(1.05); }
         }
 
         h1 {
             font-family: 'Cinzel Decorative', cursive;
-            font-size: 3.5rem;
+            font-size: 4rem;
             color: var(--primary-gold);
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            animation: glowText 2s ease-in-out infinite;
         }
 
-        h2 {
-            font-size: 1.5rem;
+        @keyframes glowText {
+            0%, 100% { text-shadow: 3px 3px 6px rgba(0,0,0,0.5), 0 0 10px var(--primary-gold); }
+            50% { text-shadow: 3px 3px 6px rgba(0,0,0,0.5), 0 0 30px var(--secondary-gold), 0 0 50px var(--primary-gold); }
+        }
+
+        .year {
+            font-size: 2rem;
             color: var(--secondary-gold);
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            font-style: italic;
+            animation: fadeIn 2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Prayers Section */
+        .prayers-container {
+            margin-top: 40px;
+        }
+
+        .prayer-card {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--primary-gold);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: slideIn 1s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .prayer-card:nth-child(1) { animation-delay: 0.2s; }
+        .prayer-card:nth-child(2) { animation-delay: 0.4s; }
+        .prayer-card:nth-child(3) { animation-delay: 0.6s; }
+        .prayer-card:nth-child(4) { animation-delay: 0.8s; }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .prayer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .prayer-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .prayer-title {
+            font-size: 1.5rem;
+            color: var(--primary-gold);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .prayer-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-light);
             font-style: italic;
         }
 
-        /* Lantern */
-        .lantern {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            animation: swing 2s infinite ease-in-out;
-            transform-origin: top center;
-        }
-
-        @keyframes swing {
-            0% { transform: rotate(5deg); }
-            50% { transform: rotate(-5deg); }
-            100% { transform: rotate(5deg); }
-        }
-
-        /* Countdown Timer */
-        .countdown {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .time-box {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            min-width: 80px;
-            border: 1px solid var(--primary-gold);
-        }
-
-        .time-box span {
-            display: block;
+        .arabic-text {
             font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--primary-gold);
+            color: var(--secondary-gold);
+            margin: 15px 0;
+            direction: rtl;
+            font-family: 'Amiri', serif;
         }
 
-        .time-box small {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        /* Decorative Elements */
+        .decorative-line {
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary-gold), transparent);
+            margin: 20px auto;
+            animation: expandLine 2s ease-out;
         }
 
-        /* Music Player Button */
-        .music-btn {
-            margin-top: 30px;
-            background: linear-gradient(45deg, var(--primary-gold), #F9E79F);
-            border: none;
-            padding: 12px 30px;
-            border-radius: 50px;
-            color: var(--deep-blue);
-            font-family: 'Cinzel Decorative', cursive;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
+        @keyframes expandLine {
+            from { width: 0; }
+            to { width: 100px; }
         }
 
-        .music-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px var(--primary-gold);
-        }
-
-        .music-btn.playing {
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
-            color: white;
-            animation: pulse 1.5s infinite;
+        /* Footer */
+        .footer-message {
+            margin-top: 40px;
+            font-size: 1.3rem;
+            color: var(--secondary-gold);
+            animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
         }
 
-        /* Footer Message */
-        .message {
-            margin-top: 40px;
-            line-height: 1.6;
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
+        /* Responsive */
         @media (max-width: 600px) {
             h1 { font-size: 2.5rem; }
-            .container { padding: 1.5rem; width: 90%; }
-            .countdown { gap: 10px; }
-            .time-box { min-width: 60px; padding: 10px; }
-            .time-box span { font-size: 1.4rem; }
+            .year { font-size: 1.5rem; }
+            .container { padding: 2rem 1.5rem; }
+            .prayer-title { font-size: 1.2rem; }
+            .prayer-text { font-size: 1rem; }
+            .arabic-text { font-size: 1.4rem; }
         }
     </style>
 </head>
@@ -206,61 +263,63 @@
     <!-- Dynamic Background Stars -->
     <div class="stars" id="starContainer"></div>
 
+    <!-- Floating Lanterns -->
+    <div class="lanterns" id="lanternContainer"></div>
+
     <div class="container">
-        <div class="lantern">🏮</div>
-        
         <div class="moon"></div>
         
         <h1>Ramzan Mubarak</h1>
-        <h2>Year 2026</h2>
+        <div class="decorative-line"></div>
+        <div class="year">Year 2026</div>
 
-        <!-- Countdown Section -->
-        <div class="countdown">
-            <div class="time-box">
-                <span id="days">00</span>
-                <small>Days</small>
+        <!-- Prayers Section -->
+        <div class="prayers-container">
+            <div class="prayer-card">
+                <span class="prayer-icon">🤲</span>
+                <div class="prayer-title">Prayer for Blessings</div>
+                <div class="arabic-text">رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً</div>
+                <div class="prayer-text">
+                    "Our Lord! Grant us good in this world and good in the Hereafter, and protect us from the torment of the Fire."
+                </div>
             </div>
-            <div class="time-box">
-                <span id="hours">00</span>
-                <small>Hours</small>
+
+            <div class="prayer-card">
+                <span class="prayer-icon">🌙</span>
+                <div class="prayer-title">Prayer for Acceptance</div>
+                <div class="prayer-text">
+                    "May Allah accept our fasting, prayers, and good deeds during this holy month. May He forgive our sins and grant us His mercy."
+                </div>
             </div>
-            <div class="time-box">
-                <span id="minutes">00</span>
-                <small>Mins</small>
+
+            <div class="prayer-card">
+                <span class="prayer-icon">💖</span>
+                <div class="prayer-title">Prayer for Peace</div>
+                <div class="prayer-text">
+                    "May this blessed month bring peace, harmony, and prosperity to you and your family. May Allah fill your heart with faith and tranquility."
+                </div>
             </div>
-            <div class="time-box">
-                <span id="seconds">00</span>
-                <small>Secs</small>
+
+            <div class="prayer-card">
+                <span class="prayer-icon">✨</span>
+                <div class="prayer-title">Prayer for Guidance</div>
+                <div class="prayer-text">
+                    "May Allah guide us to the straight path, strengthen our faith, and help us become better Muslims. May He bless us with the strength to worship Him sincerely."
+                </div>
             </div>
         </div>
 
-        <!-- Music Player Button -->
-        <button class="music-btn" id="musicBtn" onclick="toggleMusic()">
-            <span id="musicIcon">▶</span> Play Ramzan Music
-        </button>
-
-        <div class="message">
-            <p>
-                "O you who have believed, decreed upon you is fasting as it was decreed upon those before you that you may become righteous."
-                <br><br>
-                <strong>Only 2 Days Left!</strong>
-            </p>
+        <div class="footer-message">
+            🌟 May Allah bless you and your family 🌟
         </div>
     </div>
-
-    <!-- Hidden Audio Element -->
-    <!-- Note: Using a copyright-free Islamic Nasheed link -->
-    <audio id="ramzanAudio" loop>
-        <source src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_0782747634.mp3?filename=arabic-oud-10684.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
 
     <script>
         // --- JAVASCRIPT LOGIC ---
 
         // 1. Generate Stars
         const starContainer = document.getElementById('starContainer');
-        const starCount = 50;
+        const starCount = 100;
 
         for (let i = 0; i < starCount; i++) {
             const star = document.createElement('div');
@@ -269,60 +328,46 @@
             const x = Math.random() * 100;
             const y = Math.random() * 100;
             const size = Math.random() * 3;
-            const delay = Math.random() * 2;
+            const delay = Math.random() * 3;
+            const duration = 2 + Math.random() * 3;
 
             star.style.left = `${x}%`;
             star.style.top = `${y}%`;
             star.style.width = `${size}px`;
             star.style.height = `${size}px`;
             star.style.animationDelay = `${delay}s`;
+            star.style.animationDuration = `${duration}s`;
 
             starContainer.appendChild(star);
         }
 
-        // 2. COUNTDOWN TIMER LOGIC (FIXED TO 2 DAYS)
-        const now = new Date();
-        const targetDate = new Date(now.getTime() + (2 * 24 * 60 * 60 * 1000)).getTime();
+        // 2. Generate Floating Lanterns
+        const lanternContainer = document.getElementById('lanternContainer');
+        const lanterns = ['🏮', '🌙', '⭐', '🕌'];
 
-        const x = setInterval(function() {
-            const currentTime = new Date().getTime();
-            const distance = targetDate - currentTime;
+        function createLantern() {
+            const lantern = document.createElement('div');
+            lantern.classList.add('floating-lantern');
+            lantern.innerHTML = lanterns[Math.floor(Math.random() * lanterns.length)];
+            
+            lantern.style.left = Math.random() * 100 + '%';
+            lantern.style.animationDuration = (10 + Math.random() * 10) + 's';
+            lantern.style.fontSize = (1.5 + Math.random() * 1.5) + 'rem';
+            
+            lanternContainer.appendChild(lantern);
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            // Remove lantern after animation
+            setTimeout(() => {
+                lantern.remove();
+            }, 20000);
+        }
 
-            document.getElementById("days").innerHTML = days < 10 ? "0" + days : days;
-            document.getElementById("hours").innerHTML = hours < 10 ? "0" + hours : hours;
-            document.getElementById("minutes").innerHTML = minutes < 10 ? "0" + minutes : minutes;
-            document.getElementById("seconds").innerHTML = seconds < 10 ? "0" + seconds : seconds;
-
-            if (distance < 0) {
-                clearInterval(x);
-                document.querySelector(".countdown").innerHTML = "Ramzan Has Arrived!";
-            }
-        }, 1000);
-
-        // 3. MUSIC PLAYER LOGIC
-        const audio = document.getElementById("ramzanAudio");
-        const btn = document.getElementById("musicBtn");
-        const icon = document.getElementById("musicIcon");
-        let isPlaying = false;
-
-        function toggleMusic() {
-            if (isPlaying) {
-                audio.pause();
-                btn.classList.remove("playing");
-                icon.innerHTML = "▶";
-                btn.innerHTML = '<span id="musicIcon">▶</span> Play Ramzan Music';
-            } else {
-                audio.play();
-                btn.classList.add("playing");
-                icon.innerHTML = "⏸";
-                btn.innerHTML = '<span id="musicIcon">⏸</span> Pause Music';
-            }
-            isPlaying = !isPlaying;
+        // Create lanterns periodically
+        setInterval(createLantern, 2000);
+        
+        // Create initial lanterns
+        for(let i = 0; i < 5; i++) {
+            setTimeout(createLantern, i * 500);
         }
     </script>
 </body>
