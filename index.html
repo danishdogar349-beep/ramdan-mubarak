@@ -106,7 +106,7 @@
             font-style: italic;
         }
 
-        /* Lantern / Fanoos Decoration */
+        /* Lantern */
         .lantern {
             font-size: 3rem;
             margin-bottom: 10px;
@@ -149,6 +149,33 @@
             letter-spacing: 1px;
         }
 
+        /* Audio Button */
+        .audio-btn {
+            margin-top: 30px;
+            background: linear-gradient(45deg, var(--primary-gold), #F9E79F);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            color: var(--deep-blue);
+            font-family: 'Cinzel Decorative', cursive;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--primary-gold);
+        }
+
+        .audio-btn:active {
+            transform: scale(0.95);
+        }
+
         /* Footer Message */
         .message {
             margin-top: 40px;
@@ -157,7 +184,6 @@
             opacity: 0.9;
         }
 
-        /* Mobile Responsiveness */
         @media (max-width: 600px) {
             h1 { font-size: 2.5rem; }
             .container { padding: 1.5rem; width: 90%; }
@@ -178,7 +204,7 @@
         <div class="moon"></div>
         
         <h1>Ramzan Mubarak</h1>
-        <h2>May this month bring peace and joy</h2>
+        <h2>Year 2026</h2>
 
         <!-- Countdown Section -->
         <div class="countdown">
@@ -200,11 +226,16 @@
             </div>
         </div>
 
+        <!-- Audio Button -->
+        <button class="audio-btn" onclick="playGreeting()">
+            <span>🔊</span> Play Greeting
+        </button>
+
         <div class="message">
             <p>
                 "O you who have believed, decreed upon you is fasting as it was decreed upon those before you that you may become righteous."
                 <br><br>
-                <strong>Wishing you a blessed and holy month.</strong>
+                <strong>Only 2 Days Left!</strong>
             </p>
         </div>
     </div>
@@ -220,12 +251,9 @@
             const star = document.createElement('div');
             star.classList.add('star');
             
-            // Random positioning
             const x = Math.random() * 100;
             const y = Math.random() * 100;
-            // Random size
             const size = Math.random() * 3;
-            // Random animation delay
             const delay = Math.random() * 2;
 
             star.style.left = `${x}%`;
@@ -237,21 +265,22 @@
             starContainer.appendChild(star);
         }
 
-        // 2. Countdown Timer Logic
-        // Set the date we're counting down to (Example: 30 days from now)
-        // You can change this date to a specific Ramadan start date
-        const countDownDate = new Date();
-        countDownDate.setDate(countDownDate.getDate() + 2); // Sets it 25 days in the future for demo
+        // 2. COUNTDOWN TIMER LOGIC FOR 2026
+        // Target Date: March 1st, 2026 (Approximate start of Ramadan 2026)
+        // Month is 0-indexed (0=Jan, 1=Feb, 2=Mar)
+        const targetDate = new Date("March 1, 2026 00:00:00").getTime();
 
         const x = setInterval(function() {
             const now = new Date().getTime();
-            const distance = countDownDate - now;
+            const distance = targetDate - now;
 
+            // Time calculations
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
+            // Display results
             document.getElementById("days").innerHTML = days < 10 ? "0" + days : days;
             document.getElementById("hours").innerHTML = hours < 10 ? "0" + hours : hours;
             document.getElementById("minutes").innerHTML = minutes < 10 ? "0" + minutes : minutes;
@@ -262,7 +291,27 @@
                 document.querySelector(".countdown").innerHTML = "Ramzan Has Arrived!";
             }
         }, 1000);
+
+        // 3. VOICE GREETING LOGIC
+        function playGreeting() {
+            // Check if browser supports speech
+            if ('speechSynthesis' in window) {
+                const msg = new SpeechSynthesisUtterance();
+                
+                // Text to speak
+                msg.text = "Ramzan Mubarak. May this holy month bring peace and blessings to you and your family.";
+                
+                // Settings
+                msg.volume = 1; // 0 to 1
+                msg.rate = 0.9; // Speed
+                msg.pitch = 1; // Pitch
+                
+                // Speak
+                window.speechSynthesis.speak(msg);
+            } else {
+                alert("Sorry, your browser does not support text-to-speech.");
+            }
+        }
     </script>
 </body>
-
 </html>
