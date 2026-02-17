@@ -149,8 +149,8 @@
             letter-spacing: 1px;
         }
 
-        /* Audio Button */
-        .audio-btn {
+        /* Music Player Button */
+        .music-btn {
             margin-top: 30px;
             background: linear-gradient(45deg, var(--primary-gold), #F9E79F);
             border: none;
@@ -167,13 +167,21 @@
             gap: 10px;
         }
 
-        .audio-btn:hover {
+        .music-btn:hover {
             transform: scale(1.05);
             box-shadow: 0 0 15px var(--primary-gold);
         }
 
-        .audio-btn:active {
-            transform: scale(0.95);
+        .music-btn.playing {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
         }
 
         /* Footer Message */
@@ -226,9 +234,9 @@
             </div>
         </div>
 
-        <!-- Audio Button -->
-        <button class="audio-btn" onclick="playGreeting()">
-            <span>🔊</span> Play Greeting
+        <!-- Music Player Button -->
+        <button class="music-btn" id="musicBtn" onclick="toggleMusic()">
+            <span id="musicIcon">▶</span> Play Ramzan Music
         </button>
 
         <div class="message">
@@ -239,6 +247,13 @@
             </p>
         </div>
     </div>
+
+    <!-- Hidden Audio Element -->
+    <!-- Note: Using a copyright-free Islamic Nasheed link -->
+    <audio id="ramzanAudio" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_0782747634.mp3?filename=arabic-oud-10684.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 
     <script>
         // --- JAVASCRIPT LOGIC ---
@@ -265,22 +280,19 @@
             starContainer.appendChild(star);
         }
 
-        // 2. COUNTDOWN TIMER LOGIC FOR 2026
-        // Target Date: March 1st, 2026 (Approximate start of Ramadan 2026)
-        // Month is 0-indexed (0=Jan, 1=Feb, 2=Mar)
-        const targetDate = new Date("March 1, 2026 00:00:00").getTime();
+        // 2. COUNTDOWN TIMER LOGIC (FIXED TO 2 DAYS)
+        const now = new Date();
+        const targetDate = new Date(now.getTime() + (2 * 24 * 60 * 60 * 1000)).getTime();
 
         const x = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
+            const currentTime = new Date().getTime();
+            const distance = targetDate - currentTime;
 
-            // Time calculations
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            // Display results
             document.getElementById("days").innerHTML = days < 10 ? "0" + days : days;
             document.getElementById("hours").innerHTML = hours < 10 ? "0" + hours : hours;
             document.getElementById("minutes").innerHTML = minutes < 10 ? "0" + minutes : minutes;
@@ -292,25 +304,25 @@
             }
         }, 1000);
 
-        // 3. VOICE GREETING LOGIC
-        function playGreeting() {
-            // Check if browser supports speech
-            if ('speechSynthesis' in window) {
-                const msg = new SpeechSynthesisUtterance();
-                
-                // Text to speak
-                msg.text = "Ramzan Mubarak. May this holy month bring peace and blessings to you and your family.";
-                
-                // Settings
-                msg.volume = 1; // 0 to 1
-                msg.rate = 0.9; // Speed
-                msg.pitch = 1; // Pitch
-                
-                // Speak
-                window.speechSynthesis.speak(msg);
+        // 3. MUSIC PLAYER LOGIC
+        const audio = document.getElementById("ramzanAudio");
+        const btn = document.getElementById("musicBtn");
+        const icon = document.getElementById("musicIcon");
+        let isPlaying = false;
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                btn.classList.remove("playing");
+                icon.innerHTML = "▶";
+                btn.innerHTML = '<span id="musicIcon">▶</span> Play Ramzan Music';
             } else {
-                alert("Sorry, your browser does not support text-to-speech.");
+                audio.play();
+                btn.classList.add("playing");
+                icon.innerHTML = "⏸";
+                btn.innerHTML = '<span id="musicIcon">⏸</span> Pause Music';
             }
+            isPlaying = !isPlaying;
         }
     </script>
 </body>
